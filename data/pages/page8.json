@@ -1,0 +1,115 @@
+{
+  "pageNumber": 8,
+  "prerequisites": {
+    "itemsRequired": 4
+  },
+  "items": [
+    {
+      "itemName": "Black Division Crate",
+      "itemId": "6a5e675d3f7a5533040ca2e4",
+      "image": "./images/items/6a5e675d3f7a5533040ca2e4.png",
+      "requirements": [
+        {
+          "documentName": "Project",
+          "amount": 2
+        },
+        {
+          "documentName": "Test",
+          "amount": 2
+        },
+        {
+          "documentName": "PMC",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "TarCoin",
+      "itemId": "6a5e67f03d0e6b95910b8605",
+      "image": "./images/items/6a5e67f03d0e6b95910b8605.png",
+      "requirements": [
+        {
+          "documentName": "Medical",
+          "amount": 5
+        },
+        {
+          "documentName": "Financial",
+          "amount": 4
+        },
+        {
+          "documentName": "PMC",
+          "amount": 4
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "White accent walls",
+      "itemId": "6a635ea3ac917886310de21f",
+      "image": "./images/items/6a635ea3ac917886310de21f.png",
+      "requirements": [
+        {
+          "documentName": "Project",
+          "amount": 6
+        },
+        {
+          "documentName": "PMC",
+          "amount": 3
+        },
+        {
+          "documentName": "Technical",
+          "amount": 2
+        },
+        {
+          "documentName": "User",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "Arch",
+      "itemId": "6a5e67dec6956153430432c5",
+      "image": "./images/items/6a5e67dec6956153430432c5.png",
+      "requirements": [
+        {
+          "documentName": "Project",
+          "amount": 6
+        },
+        {
+          "documentName": "PMC",
+          "amount": 3
+        },
+        {
+          "documentName": "Technical",
+          "amount": 2
+        },
+        {
+          "documentName": "User",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Dome",
+      "itemId": "6a5e67cd86013ce1c70df997",
+      "image": "./images/items/6a5e67cd86013ce1c70df997.png",
+      "requirements": [
+        {
+          "documentName": "PMC",
+          "amount": 1
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 2
+        },
+        {
+          "documentName": "Project",
+          "amount": 1
+        }
+      ]
+    }
+  ]
+}

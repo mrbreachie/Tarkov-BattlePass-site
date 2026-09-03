@@ -1,0 +1,108 @@
+{
+  "pageNumber": 11,
+  "prerequisites": {
+    "itemsRequired": 3
+  },
+  "items": [
+    {
+      "itemName": "Dog tag",
+      "itemId": "6a5e676cb793ab50a2074171",
+      "image": "./images/items/6a5e676cb793ab50a2074171.png",
+      "requirements": [
+        {
+          "documentName": "Financial",
+          "amount": 4
+        },
+        {
+          "documentName": "User",
+          "amount": 3
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 2
+        },
+        {
+          "documentName": "Technical",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "TarCoin",
+      "itemId": "6a5e67f03d0e6b95910b8605",
+      "image": "./images/items/6a5e67f03d0e6b95910b8605.png",
+      "requirements": [
+        {
+          "documentName": "PMC",
+          "amount": 5
+        },
+        {
+          "documentName": "Financial",
+          "amount": 5
+        },
+        {
+          "documentName": "User",
+          "amount": 3
+        },
+        {
+          "documentName": "Medical",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "itemName": "Knyazev (After Battle)",
+      "itemId": "[6a5e67aacd043de3220f19a3]",
+      "image": "./images/items/6a5e67aacd043de3220f19a3.png",
+      "requirements": [
+        {
+          "documentName": "Technical",
+          "amount": 5
+        },
+        {
+          "documentName": "Financial",
+          "amount": 5
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 3
+        },
+        {
+          "documentName": "User",
+          "amount": 3
+        },
+        {
+          "documentName": "Project",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "itemName": "O’Connor (After Battle) ",
+      "itemId": "6a5e67a2905106a6860e0050",
+      "image": "./images/items/6a5e67a2905106a6860e0050.png",
+      "requirements": [
+        {
+          "documentName": "Medical",
+          "amount": 5
+        },
+        {
+          "documentName": "PMC",
+          "amount": 5
+        },
+        {
+          "documentName": "Test",
+          "amount": 3
+        },
+        {
+          "documentName": "Project",
+          "amount": 3
+        },
+        {
+          "documentName": "User",
+          "amount": 3
+        }
+      ]
+    }
+  ]
+}

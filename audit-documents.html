@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BattlePass Data Audit</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #101515; color: #e4e8df; padding: 25px; }
+    h1 { color: #e3d39b; }
+    h2 { color: #c5a64b; margin-top: 30px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #39504d; padding: 8px 12px; text-align: left; font-size: 13px; vertical-align: top; }
+    th { background: #172222; color: #e3d39b; }
+    .matched { background: rgba(60, 120, 90, 0.15); }
+    .unmatched, .flagged { background: rgba(200, 70, 60, 0.2); }
+    .count { text-align: right; }
+    .ok { color: #92a39e; font-style: italic; }
+    img.thumb { max-width: 40px; max-height: 40px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<h1>BattlePass Data Audit</h1>
+<p>Scans every page file against documents.json and checks for common data issues.</p>
+<div id="output">Loading…</div>
+
+<script>
+async function run() {
+    const output = document.querySelector("#output");
+    try {
+        const indexResponse = await fetch("./data/battlepass-index.json");
+        const index = await indexResponse.json();
+
+        const documentsResponse = await fetch("./data/documents.json");
+        const documents = await documentsResponse.json();
+
+        const pageResponses = await Promise.all(
+            index.pageFiles.map(file => fetch(`./data/pages/${file}`))
+        );
+        const pages = await Promise.all(pageResponses.map(r => r.json()));
+
+        function normalize(value) {
+            return typeof value === "string" ? value.trim().toLowerCase() : value;
+        }
+
+        function findMatch(documentName) {
+            const normalized = normalize(documentName);
+            return documents.find(doc =>
+                normalize(doc.shortName) === normalized || normalize(doc["Document name"]) === normalized
+            );
+        }
+
+        function escapeHtml(value) {
+            const div = document.createElement("div");
+            div.textContent = value ?? "";
+            return div.innerHTML;
+        }
+
+        let html = "";
+
+        // ---------- 1. Document name matching (existing check) ----------
+        const usage = {};
+        pages.forEach(page => {
+            page.items.forEach(item => {
+                (item.requirements || []).forEach(req => {
+                    const key = req.documentName;
+                    if (!usage[key]) usage[key] = [];
+                    usage[key].push({ pageNumber: page.pageNumber, itemName: item.itemName });
+                });
+            });
+        });
+
+        const byDocument = {};
+        const unmatched = {};
+        const usedCanonicalNames = new Set();
+
+        Object.keys(usage).forEach(rawValue => {
+            const match = findMatch(rawValue);
+            if (match) {
+                const canonical = match["Document name"];
+                usedCanonicalNames.add(canonical);
+                if (!byDocument[canonical]) byDocument[canonical] = new Set();
+                byDocument[canonical].add(rawValue);
+            } else {
+                unmatched[rawValue] = usage[rawValue];
+            }
+        });
+
+        html += `<h2>1. Document name matching</h2>`;
+        html += `<table><tr><th>Canonical name</th><th>Variant strings typed in your pages</th></tr>`;
+        Object.keys(byDocument).sort().forEach(canonical => {
+            const variants = Array.from(byDocument[canonical]);
+            const flagged = variants.length > 1 ? " ⚠️ multiple spellings in use" : "";
+            html += `<tr class="matched"><td>${escapeHtml(canonical)}${flagged}</td><td>${variants.map(v => `"${escapeHtml(v)}"`).join(", ")}</td></tr>`;
+        });
+        html += `</table>`;
+
+        const unmatchedKeys = Object.keys(unmatched);
+        if (unmatchedKeys.length > 0) {
+            html += `<table><tr><th>Unmatched value</th><th>Appears on</th><th class="count">Times used</th></tr>`;
+            unmatchedKeys.sort().forEach(rawValue => {
+                const uses = unmatched[rawValue];
+                const locations = uses.map(u => `Page ${u.pageNumber} (${escapeHtml(u.itemName)})`).join("; ");
+                html += `<tr class="unmatched"><td>"${escapeHtml(rawValue)}"</td><td>${locations}</td><td class="count">${uses.length}</td></tr>`;
+            });
+            html += `</table>`;
+        } else {
+            html += `<p class="ok">No unmatched document names.</p>`;
+        }
+
+        // ---------- 2. Unused documents in documents.json ----------
+        html += `<h2>2. Documents defined but never used</h2>`;
+        const unusedDocs = documents.filter(doc => !usedCanonicalNames.has(doc["Document name"]));
+        if (unusedDocs.length === 0) {
+            html += `<p class="ok">Every document in documents.json is used somewhere.</p>`;
+        } else {
+            html += `<table><tr><th>Document name</th><th>Short code</th></tr>`;
+            unusedDocs.forEach(doc => {
+                html += `<tr class="flagged"><td>${escapeHtml(doc["Document name"])}</td><td>${escapeHtml(doc.shortName || "—")}</td></tr>`;
+            });
+            html += `</table>`;
+        }
+
+        // ---------- 3. Missing / placeholder itemIds ----------
+        html += `<h2>3. Missing or placeholder item IDs</h2>`;
+        const idIssues = [];
+        pages.forEach(page => {
+            page.items.forEach(item => {
+                const id = item.itemId;
+                if (!id || id.trim() === "" || id === "example-id") {
+                    idIssues.push({ pageNumber: page.pageNumber, itemName: item.itemName, id: id || "(empty)" });
+                }
+            });
+        });
+        if (idIssues.length === 0) {
+            html += `<p class="ok">Every item has a real itemId.</p>`;
+        } else {
+            html += `<table><tr><th>Page</th><th>Item</th><th>Current itemId</th></tr>`;
+            idIssues.forEach(issue => {
+                html += `<tr class="flagged"><td>${issue.pageNumber}</td><td>${escapeHtml(issue.itemName)}</td><td>${escapeHtml(issue.id)}</td></tr>`;
+            });
+            html += `</table>`;
+        }
+
+        // ---------- 4. Duplicate itemIds ----------
+        html += `<h2>4. Duplicate item IDs</h2>`;
+        const idLocations = {};
+        pages.forEach(page => {
+            page.items.forEach(item => {
+                if (!item.itemId) return;
+                if (!idLocations[item.itemId]) idLocations[item.itemId] = [];
+                idLocations[item.itemId].push({ pageNumber: page.pageNumber, itemName: item.itemName });
+            });
+        });
+        const duplicateIds = Object.entries(idLocations).filter(([id, locs]) => locs.length > 1);
+        if (duplicateIds.length === 0) {
+            html += `<p class="ok">No duplicate item IDs found.</p>`;
+        } else {
+            html += `<table><tr><th>itemId</th><th>Used by</th></tr>`;
+            duplicateIds.forEach(([id, locs]) => {
+                const locationText = locs.map(l => `Page ${l.pageNumber} (${escapeHtml(l.itemName)})`).join("; ");
+                html += `<tr class="flagged"><td>${escapeHtml(id)}</td><td>${locationText}</td></tr>`;
+            });
+            html += `</table>`;
+        }
+
+        // ---------- 5. Broken image links ----------
+        html += `<h2>5. Image paths that don't load</h2><p>Checking… this may take a moment.</p>`;
+        output.innerHTML = html; // show progress so far while images check
+
+        const allImagePaths = new Set();
+        documents.forEach(doc => { if (doc.image) allImagePaths.add(doc.image); });
+        pages.forEach(page => {
+            page.items.forEach(item => { if (item.image) allImagePaths.add(item.image); });
+        });
+
+        const brokenImages = [];
+        await Promise.all(Array.from(allImagePaths).map(path =>
+            fetch(path, { method: "HEAD" })
+                .then(response => { if (!response.ok) brokenImages.push(path); })
+                .catch(() => brokenImages.push(path))
+        ));
+
+        let imageHtml = `<h2>5. Image paths that don't load</h2>`;
+        if (brokenImages.length === 0) {
+            imageHtml += `<p class="ok">All ${allImagePaths.size} referenced images load fine.</p>`;
+        } else {
+            imageHtml += `<table><tr><th>Broken path</th></tr>`;
+            brokenImages.sort().forEach(path => {
+                imageHtml += `<tr class="flagged"><td>${escapeHtml(path)}</td></tr>`;
+            });
+            imageHtml += `</table>`;
+        }
+
+        // ---------- 6. Pages with no prerequisites configured ----------
+        let prereqHtml = `<h2>6. Pages with no unlock threshold set</h2>`;
+        const unconfigured = pages.filter(page => page.pageNumber !== 1 && (!page.prerequisites || !page.prerequisites.itemsRequired));
+        if (unconfigured.length === 0) {
+            prereqHtml += `<p class="ok">Every page (besides page 1) has a threshold set.</p>`;
+        } else {
+            prereqHtml += `<table><tr><th>Page</th><th>Status</th></tr>`;
+            unconfigured.forEach(page => {
+                prereqHtml += `<tr class="flagged"><td>${page.pageNumber}</td><td>itemsRequired missing or 0</td></tr>`;
+            });
+            prereqHtml += `</table>`;
+        }
+
+        // Replace section 5 placeholder + append section 6
+        output.innerHTML = html.replace(
+            `<h2>5. Image paths that don't load</h2><p>Checking… this may take a moment.</p>`,
+            imageHtml
+        ) + prereqHtml;
+
+    } catch (error) {
+        output.innerHTML = `<p style="color:#e77d70">Error: ${error.message}</p>`;
+        console.error(error);
+    }
+}
+
+run();
+</script>
+</body>
+</html>

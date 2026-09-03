@@ -1,0 +1,64 @@
+# Operating System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+*.code-workspace
+
+# Node.js (if you ever add a build process)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python (if using local server)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.bak
+*.temp
+temp/
+tmp/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Cache
+.cache/
+*.cache
+
+# OS specific
+.AppleDouble
+.LSOverride
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Backup files
+*.backup
+*.bkp
+
+# Misc
+.env
+.env.local
+.project
+.classpath
+.c9/
+.history
+.rpt2_cache
+.nyc_output

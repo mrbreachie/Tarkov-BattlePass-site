@@ -1,0 +1,77 @@
+{
+  "pageNumber": 6,
+  "prerequisites": {
+    "itemsRequired": 2
+  },
+  "items": [
+    {
+      "itemName": "Knyazev ",
+      "itemId": "6a5e67a63f7a5533040ca2e6",
+      "image": "./images/items/6a5e67a63f7a5533040ca2e6.png",
+      "requirements": [
+        {
+          "documentName": "Financial",
+          "amount": 4
+        },
+        {
+          "documentName": "Technical",
+          "amount": 4
+        },
+        {
+          "documentName": "Medical",
+          "amount": 3
+        },
+        {
+          "documentName": "Test",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "O’Connor ",
+      "itemId": "6a5e679dbf561127450b27c6]",
+      "image": "./images/items/6a5e679dbf561127450b27c6.png",
+      "requirements": [
+        {
+          "documentName": "Financial",
+          "amount": 4
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 3
+        },
+        {
+          "documentName": "PMC",
+          "amount": 3
+        },
+        {
+          "documentName": "Technical",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "Howa Type 20 5.56 AR",
+      "itemId": "6a5e6867ae0ff1630b08d1c9",
+      "image": "./images/items/6a5e6867ae0ff1630b08d1c9.png",
+      "requirements": [
+        {
+          "documentName": "Blueprints",
+          "amount": 6
+        },
+        {
+          "documentName": "Project",
+          "amount": 2
+        },
+        {
+          "documentName": "PMC",
+          "amount": 2
+        },
+        {
+          "documentName": "User",
+          "amount": 1
+        }
+      ]
+    }
+  ]
+}

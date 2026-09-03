@@ -1,0 +1,92 @@
+{
+  "pageNumber": 7,
+  "prerequisites": {
+    "itemsRequired": 3
+  },
+  "items": [
+    {
+      "itemName": "Dogtag",
+      "itemId": "6a5e6678dffe83817c03096a",
+      "image": "./images/items/6a5e6678dffe83817c03096a.png",
+      "requirements": [
+        {
+          "documentName": "User",
+          "amount": 5
+        },
+        {
+          "documentName": "Technical",
+          "amount": 3
+        },
+        {
+          "documentName": "Project",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "Tarcoin",
+      "itemId": "6a5e67f03d0e6b95910b8605",
+      "image": "./images/items/6a5e67f03d0e6b95910b8605.png",
+      "requirements": [
+        {
+          "documentName": "Blueprints",
+          "amount": 4
+        },
+        {
+          "documentName": "Test",
+          "amount": 2
+        },
+        {
+          "documentName": "Medical",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "Scorpion upper",
+      "itemId": "6a6b4834168e3ef7740acefd",
+      "image": "./images/items/6a6b4834168e3ef7740acefd.png",
+      "requirements": [
+        {
+          "documentName": "Medical",
+          "amount": 5
+        },
+        {
+          "documentName": "Financial",
+          "amount": 3
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 3
+        },
+        {
+          "documentName": "Technical",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "Scorpion lower",
+      "itemId": "6a5e67e7e2d6c908db0d5d58",
+      "image": "./images/items/6a5e67e7e2d6c908db0d5d58.png",
+      "requirements": [
+        {
+          "documentName": "Medical",
+          "amount": 5
+        },
+        {
+          "documentName": "PMC",
+          "amount": 3
+        },
+        {
+          "documentName": "User",
+          "amount": 3
+        },
+        {
+          "documentName": "Project",
+          "amount": 2
+        }
+      ]
+    }
+  ]
+}

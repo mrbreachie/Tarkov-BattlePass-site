@@ -1,0 +1,97 @@
+{
+  "pageNumber": 12,
+  "prerequisites": {
+    "itemsRequired": 0
+  },
+  "items": [
+    {
+      "itemName": "Norinco QBZ-191 5.8x42 assault rifle",
+      "itemId": "6a5e687f5a56a948810bb5c5",
+      "image": "./images/items/6a5e687f5a56a948810bb5c5.png",
+      "requirements": [
+        {
+          "documentName": "PMC",
+          "amount": 7
+        },
+        {
+          "documentName": "Test",
+          "amount": 6
+        },
+        {
+          "documentName": "User",
+          "amount": 6
+        },
+        {
+          "documentName": "Project",
+          "amount": 5
+        },
+        {
+          "documentName": "Financial",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "itemName": "Nocturnal upper",
+      "itemId": "6a6b4839b2f3ecde0c0658d8",
+      "image": "images/items/6a6b4839b2f3ecde0c0658d8.png",
+      "requirements": [
+        {
+          "documentName": "User",
+          "amount": 6
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 5
+        },
+        {
+          "documentName": "Project",
+          "amount": 5
+        },
+        {
+          "documentName": "Technical",
+          "amount": 4
+        },
+        {
+          "documentName": "Financial",
+          "amount": 3
+        },
+        {
+          "documentName": "PMC",
+          "amount": 1
+        },
+        {
+          "documentName": "Medical",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Nocturnal lower",
+      "itemId": "6a5e67ecc0e52002fd09d8b2",
+      "image": "./images/items/6a5e67ecc0e52002fd09d8b2.png",
+      "requirements": [
+        {
+          "documentName": "Blueprints",
+          "amount": 6
+        },
+        {
+          "documentName": "Financial",
+          "amount": 4
+        },
+        {
+          "documentName": "Technical",
+          "amount": 4
+        },
+        {
+          "documentName": "Project",
+          "amount": 4
+        },
+        {
+          "documentName": "Test",
+          "amount": 3
+        }
+      ]
+    }
+  ]
+}

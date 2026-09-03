@@ -1,0 +1,103 @@
+{
+  "pageNumber": 4,
+  "prerequisites": {
+    "itemsRequired": 4
+  },
+  "items": [
+    {
+      "itemName": "Marked dogtag",
+      "itemId": "6a5e6767ac605a08520e2a53",
+      "image": "./images/items/6a5e6767ac605a08520e2a53.png",
+      "requirements": [
+        {
+          "documentName": "Project",
+          "amount": 1
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 2
+        },
+        {
+          "documentName": "User",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Microtech Jagdkommando knife",
+      "itemId": "6a5e6876c6956153430432c7",
+      "image": "./images/items/6a5e6876c6956153430432c7.png",
+      "requirements": [
+        {
+          "documentName": "User",
+          "amount": 4
+        },
+        {
+          "documentName": "Medical",
+          "amount": 3
+        },
+        {
+          "documentName": "Financial",
+          "amount": 2
+        },
+        {
+          "documentName": "PMC",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "TarCoin ",
+      "itemId": "6a5e67f03d0e6b95910b8605",
+      "image": "./images/items/6a5e67f03d0e6b95910b8605.png",
+      "requirements": [
+        {
+          "documentName": "Technical",
+          "amount": 2
+        },
+        {
+          "documentName": "Project",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "Beware the Bear poster ",
+      "itemId": "6a5e6793b793ab50a2074172",
+      "image": "./images/items/6a5e6793b793ab50a2074172.png",
+      "requirements": [
+        {
+          "documentName": "Test",
+          "amount": 2
+        },
+        {
+          "documentName": "Medical",
+          "amount": 2
+        },
+        {
+          "documentName": "Technical",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Black Division Crate",
+      "itemId": "6a5e675d3f7a5533040ca2e4",
+      "image": "./images/items/6a5e675d3f7a5533040ca2e4.png",
+      "requirements": [
+        {
+          "documentName": "PMC",
+          "amount": 1
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 2
+        },
+        {
+          "documentName": "User",
+          "amount": 2
+        }
+      ]
+    }
+  ]
+}

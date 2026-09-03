@@ -1,0 +1,115 @@
+{
+  "pageNumber": 9,
+  "prerequisites": {
+    "itemsRequired": 4
+  },
+  "items": [
+    {
+      "itemName": "Spiritus Systems LV-119 Plate Carrier (Black Division V2)",
+      "itemId": "6a5e6681ae0ff1630b08d1bf",
+      "image": "./images/items/6a5e6681ae0ff1630b08d1bf.png ",
+      "requirements": [
+        {
+          "documentName": "Medical",
+          "amount": 4
+        },
+        {
+          "documentName": "User",
+          "amount": 4
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 2
+        },
+        {
+          "documentName": "Test",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "TarCoin",
+      "itemId": "6a5e67f03d0e6b95910b8605",
+      "image": "./images/items/6a5e67f03d0e6b95910b8605.png",
+      "requirements": [
+        {
+          "documentName": "Financial",
+          "amount": 3
+        },
+        {
+          "documentName": "Technical",
+          "amount": 2
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Tasmanian Tiger Modular Pack 45 Plus (MultiCam Black)",
+      "itemId": "6a5e678aac605a08520e2a54",
+      "image": "./images/items/6a5e678aac605a08520e2a54.png",
+      "requirements": [
+        {
+          "documentName": "PMC",
+          "amount": 5
+        },
+        {
+          "documentName": "Financial",
+          "amount": 2
+        },
+        {
+          "documentName": "Project",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "itemName": "Black Division Crate",
+      "itemId": "6a5e675d3f7a5533040ca2e4",
+      "image": "./images/items/6a5e675d3f7a5533040ca2e4.png",
+      "requirements": [
+        {
+          "documentName": "Project",
+          "amount": 2
+        },
+        {
+          "documentName": "Financial",
+          "amount": 2
+        },
+        {
+          "documentName": "Medical",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Menu Background (Server Room)",
+      "itemId": "6a5e67e35a56a948810bb5c3",
+      "image": "./images/items/6a5e67e35a56a948810bb5c3.png",
+      "requirements": [
+        {
+          "documentName": "Technical",
+          "amount": 6
+        },
+        {
+          "documentName": "PMC",
+          "amount": 4
+        },
+        {
+          "documentName": "Test",
+          "amount": 4
+        },
+        {
+          "documentName": "User",
+          "amount": 2
+        },
+        {
+          "documentName": "Financial",
+          "amount": 2
+        }
+      ]
+    }
+  ]
+}

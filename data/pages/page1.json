@@ -1,0 +1,47 @@
+{
+  "pageNumber": 1,
+  "prerequisites": {
+    "itemsRequired": 4
+  },
+  "items": [
+    {
+      "itemName": "Marked dogtag",
+      "itemId": "6a5e6763cd043de3220f19a1",
+      "image": "./images/items/6a5e6763cd043de3220f19a1.png",
+      "requirements": []
+    },
+    {
+      "itemName": "TarCoin",
+      "itemId": "6a5e67f03d0e6b95910b8605",
+      "image": "./images/items/6a5e67f03d0e6b95910b8605.png",
+      "requirements": []
+    },
+    {
+      "itemName": "Burn Poster",
+      "itemId": "6a5e66a03d0e6b95910b85fe",
+      "image": "./images/items/6a5e6798438217c0b20b65ba.png",
+      "requirements": [
+        {
+          "documentName": "Test",
+          "amount": 2
+        },
+        {
+          "documentName": "User",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Black Division Crate",
+      "itemId": "6a5e675d3f7a5533040ca2e4",
+      "image": "./images/items/6a5e675d3f7a5533040ca2e4.png",
+      "requirements": []
+    },
+    {
+      "itemName": "Black Wood Ceiling",
+      "itemId": "6a635e9519f0ae49350a23e8",
+      "image": "./images/items/6a635e9519f0ae49350a23e8.png",
+      "requirements": []
+    }
+  ]
+}

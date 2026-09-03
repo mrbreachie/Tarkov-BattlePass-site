@@ -1,0 +1,27 @@
+{
+    "pageNumber": 2,
+    "prerequisites": {
+        "itemsRequired": 4
+    },
+    "items": [
+        {
+            "itemName": "Red Hawaiin Shirt",
+            "itemId": "6a5e6854ac605a08520e2a57",
+            "image": "./images/items/6a5e6854ac605a08520e2a57.png",
+            "requirements": [
+                {
+                    "documentName": "Project",
+                    "amount": 3
+                },
+                {
+                    "documentName": "Financial",
+                    "amount": 3
+                },
+                {
+                    "documentName": "Medical",
+                    "amount": 1
+                }
+            ]
+        }
+    ]
+}

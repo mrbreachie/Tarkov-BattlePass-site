@@ -1,0 +1,115 @@
+{
+  "pageNumber": 5,
+  "prerequisites": {
+    "itemsRequired": 4
+  },
+  "items": [
+    {
+      "itemName": "Hawaiian shirt",
+      "itemId": "6a5e685ab793ab50a2074175",
+      "image": "./images/items/6a5e685ab793ab50a2074175.png",
+      "requirements": [
+        {
+          "documentName": "Financial",
+          "amount": 3
+        },
+        {
+          "documentName": "Technical",
+          "amount": 2
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 2
+        },
+        {
+          "documentName": "Test",
+          "amount": 2
+        },
+        {
+          "documentName": "Project",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "TarCoin",
+      "itemId": "6a5e67f03d0e6b95910b8605",
+      "image": "./images/items/6a5e67f03d0e6b95910b8605.png",
+      "requirements": [
+        {
+          "documentName": "Blueprints",
+          "amount": 4
+        },
+        {
+          "documentName": "Financial",
+          "amount": 1
+        },
+        {
+          "documentName": "Project",
+          "amount": 1
+        },
+        {
+          "documentName": "Medical",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Black Division Target",
+      "itemId": "6a5e67f4438217c0b20b65bc",
+      "image": "./images/items/6a5e67f4438217c0b20b65bc.png",
+      "requirements": [
+        {
+          "documentName": "PMC",
+          "amount": 2
+        },
+        {
+          "documentName": "Medical",
+          "amount": 2
+        },
+        {
+          "documentName": "Project",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Black Division Crate",
+      "itemId": "6a5e675d3f7a5533040ca2e4",
+      "image": "./images/items/6a5e675d3f7a5533040ca2e4.png",
+      "requirements": [
+        {
+          "documentName": "Test",
+          "amount": 3
+        },
+        {
+          "documentName": "Technical",
+          "amount": 2
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "itemName": "Ferro Concepts FCPC V5 Plate Carrier (Black Division)",
+      "itemId": "6a5e667d86013ce1c70df990",
+      "image": "./images/items/6a5e667d86013ce1c70df990.png",
+      "requirements": [
+        {
+          "documentName": "Project",
+          "amount": 3
+        },
+        {
+          "documentName": "Blueprints",
+          "amount": 2
+        },
+        {
+          "documentName": "User",
+          "amount": 2
+        }
+      ]
+    }
+  ]
+}
