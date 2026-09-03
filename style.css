@@ -799,7 +799,7 @@ button:disabled {
   }
 
   .range-panel-wrapper {
-    padding: 10px 10px 15px;
+    padding: 0 10px 15px;
   }
 
   .range-layout {
