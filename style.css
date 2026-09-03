@@ -714,9 +714,12 @@ button:disabled {
   color: #e77d70;
 }
 
+/* ---------- Responsive layout ---------- */
+
 @media (max-width: 950px) {
   .page-slide .battlepass-layout {
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: minmax(190px, 0.8fr) minmax(0, 1.2fr);
+    gap: 16px;
   }
 
   .requirements-panel {
@@ -725,7 +728,7 @@ button:disabled {
 
   .documents-columns {
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 16px;
   }
 
   .route-steps {
@@ -733,120 +736,101 @@ button:disabled {
   }
 }
 
-@media (max-width: 480px) {
-  .document-rows-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 @media (max-width: 650px) {
+  body {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
   .top-bar {
-    padding: 12px 90px 12px 12px;
+    min-height: 48px;
+    padding: 10px 12px;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .top-bar h1 {
+    font-size: 17px;
+    letter-spacing: 1px;
+    white-space: nowrap;
   }
 
   .jump-to-range {
-    right: 10px;
-    padding: 6px 9px;
-    font-size: 11px;
+    position: static;
+    transform: none;
+    flex: 0 0 auto;
+    padding: 7px 9px;
+    font-size: 10px;
+    letter-spacing: 0.25px;
   }
 
   .progress-bar-wrapper {
-    padding: 12px;
+    padding: 10px 12px 12px;
   }
 
   .progress-top-row {
     gap: 8px;
+    margin-bottom: 10px;
   }
 
   .progress-label {
-    min-width: 80px;
+    min-width: 0;
+    font-size: 13px;
   }
 
   .nav-arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+
+  .progress-segments {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 1px 1px 3px;
+    scrollbar-width: none;
+  }
+
+  .progress-segments::-webkit-scrollbar {
+    display: none;
+  }
+
+  .progress-segment {
+    flex: 0 0 28px;
     width: 28px;
     height: 28px;
-    font-size: 18px;
   }
 
   .scroll-nav {
-    padding: 10px;
+    padding: 10px 12px 0;
   }
 
   .page-slide .battlepass-layout {
     display: flex;
     flex-direction: column;
+    gap: 12px;
+  }
+
+  .preview-panel,
+  .item-list-panel,
+  .requirements-panel {
+    width: 100%;
+  }
+
+  .preview-panel {
+    order: 1;
+    min-height: 0;
+    padding: 12px;
   }
 
   .item-list-panel {
     order: 2;
   }
 
-  .preview-panel {
-    order: 1;
-  }
-
   .requirements-panel {
     order: 3;
-  }
-
-  .page-summary-box {
-    margin: 10px 12px;
-    padding: 10px 12px;
-  }
-
-  .route-steps {
-    column-count: 2;
-  }
-
-  .range-panel-wrapper {
-    padding: 0 10px 15px;
-  }
-
-  .range-layout {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .range-controls {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .range-field select {
-    min-width: 0;
-    flex: 1 1 120px;
-  }
-}
-
-@media (max-width: 480px) {
-  body {
-    min-width: 320px;
-  }
-
-  .top-bar h1 {
-    font-size: 18px;
-    letter-spacing: 1px;
-  }
-
-  .progress-label {
-    font-size: 12px;
-    min-width: 72px;
-  }
-
-  .progress-segment {
-    width: 24px;
-    height: 24px;
-    font-size: 11px;
-  }
-
-  .nav-arrow {
-    width: 24px;
-    height: 24px;
-    font-size: 16px;
-  }
-
-  .scroll-nav {
-    padding: 8px 6px;
   }
 
   .item-list-panel h2,
@@ -856,43 +840,157 @@ button:disabled {
   }
 
   #pages-scroll [id^="item-list-"] {
-    grid-template-columns: 1fr;
-    gap: 6px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
     padding: 8px;
   }
 
   .item-card {
-    padding: 6px;
+    padding: 8px 6px;
+    gap: 6px;
+  }
+
+  .item-card img {
+    height: 64px;
+  }
+
+  .large-preview {
+    height: 180px;
+  }
+
+  .preview-panel h2 {
+    margin: 14px 0 6px;
+    font-size: 18px;
+  }
+
+  .preview-panel h3,
+  .requirements-panel h3 {
+    margin: 14px 0 6px;
+  }
+
+  .page-summary-box {
+    margin: 8px 10px;
+    padding: 10px;
+  }
+
+  .full-width-section {
+    margin-top: 12px;
+  }
+
+  .collapsible-section summary {
+    min-height: 44px;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .summary-meta {
+    max-width: 48%;
+    font-size: 10px;
+  }
+
+  .disclosure-inner,
+  .range-panel .disclosure-inner {
+    padding: 0 12px 12px;
+  }
+
+  .documents-columns {
+    gap: 12px;
+  }
+
+  .documents-columns .document-rows-grid,
+  .document-rows-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .documents-columns .requirement-row:not(.requirement-row-total) {
+    padding: 8px 10px;
+  }
+
+  .route-summary {
+    margin-top: 14px;
+    padding-top: 10px;
+  }
+
+  .route-summary summary {
+    padding: 8px 0;
+    font-size: 12px;
+  }
+
+  .route-steps {
+    column-count: 1;
+    padding-top: 2px;
+  }
+
+  .route-step {
+    margin-bottom: 8px;
+    padding: 9px 10px;
+  }
+
+  .range-panel-wrapper {
+    padding: 0 12px 16px;
+  }
+
+  .range-panel > summary {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .range-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .range-controls {
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .range-field {
+    flex: 1 1 120px;
+  }
+
+  .range-field select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .top-bar h1 {
+    font-size: 15px;
+  }
+
+  .jump-to-range {
+    padding-inline: 7px;
+    font-size: 9px;
+  }
+
+  .progress-bar-wrapper {
+    padding-inline: 8px;
+  }
+
+  .scroll-nav {
+    padding-inline: 8px;
+  }
+
+  #pages-scroll [id^="item-list-"] {
+    gap: 6px;
   }
 
   .item-card img {
     height: 56px;
   }
 
-  .item-card-name {
-    font-size: 11px;
-  }
-
-  .preview-panel {
-    padding: 10px;
-  }
-
-  .large-preview {
-    height: 170px;
-  }
-
-  .document-icon {
-    width: 16px;
-    height: 16px;
-  }
-
+  .item-card-name,
   .document-label-text,
   .requirement-row,
   .route-step {
     font-size: 11px;
   }
 
-  .route-steps {
-    column-count: 1;
+  .range-panel-wrapper {
+    padding-inline: 8px;
   }
 }
