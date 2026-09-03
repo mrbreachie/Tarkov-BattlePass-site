@@ -190,16 +190,21 @@ function buildSlideTemplate(pageNumber) {
           <h2>Page Requirements</h2>
 
           <div class="page-summary-box" id="page-summary-${pageNumber}"></div>
-
-          <details class="collapsible-section" open>
-            <summary>Documents Needed This Page</summary>
-            <div class="disclosure-body">
-              <div class="disclosure-inner" id="page-documents-${pageNumber}"></div>
-            </div>
-          </details>
         </aside>
 
       </main>
+
+      <section class="full-width-section">
+        <details class="collapsible-section" open>
+          <summary>
+            <span>Documents Needed This Page</span>
+            <span class="summary-meta" id="page-documents-meta-${pageNumber}"></span>
+          </summary>
+          <div class="disclosure-body">
+            <div class="disclosure-inner" id="page-documents-${pageNumber}"></div>
+          </div>
+        </details>
+      </section>
     </div>
   `;
 }
@@ -469,12 +474,14 @@ function buildDocumentRows(totals) {
     `;
     }
 
-    return entries.map(([documentName, amount]) => `
+    const rows = entries.map(([documentName, amount]) => `
       <div class="requirement-row">
         <span class="document-name-cell">${buildDocumentLabel(documentName, getDocumentShortName(documentName))}</span>
         <strong>${amount}</strong>
       </div>
     `).join("");
+
+    return `<div class="document-rows-grid">${rows}</div>`;
 }
 
 function buildTotalRow(totals) {
@@ -491,9 +498,10 @@ function buildTotalRow(totals) {
 function buildCollapsibleSection(title, summaryText, contentHtml, isOpen = false, extraClass = "") {
     const stateClass = isOpen ? "" : " is-collapsed";
     const className = `collapsible-section${extraClass ? " " + extraClass : ""}${stateClass}`;
+    const openAttr = isOpen ? " open" : "";
 
     return `
-      <details class="${className}" open>
+      <details class="${className}"${openAttr}>
         <summary>
           <span>${title}</span>
           <span class="summary-meta">${summaryText}</span>
@@ -659,14 +667,14 @@ function buildRangeRouteSummary(fromPage, toPage) {
         if (!page) continue;
 
         const minimumItems = calculateMinimumItemsForPrerequisites(page);
-        const minimumNames = minimumItems.length
-            ? minimumItems.map(item => item.itemName).join(", ")
-            : "No item unlock required";
+        const itemsHtml = minimumItems.length
+            ? `<ul class="route-step-items">${minimumItems.map(item => `<li>${item.itemName}</li>`).join("")}</ul>`
+            : `<span class="route-step-empty">No item unlock required</span>`;
 
         steps.push(`
           <div class="route-step">
-            <strong>Page ${pageNumber}</strong>
-            <span>${minimumNames}</span>
+            <div class="route-step-header">Page ${pageNumber}</div>
+            ${itemsHtml}
           </div>
         `);
     }
@@ -688,8 +696,8 @@ function buildRangeRouteSummary(fromPage, toPage) {
 }
 
 function buildMinimumPathDetailHtml(minimumItems, minimumTotals) {
-    const itemRows = minimumItems.length
-        ? minimumItems.map(({ itemName, itemCost }) => {
+    const itemsHtml = minimumItems.length
+        ? `<div class="minimum-items-grid">${minimumItems.map(({ itemName, itemCost }) => {
             const itemTotal = Object.values(itemCost).reduce((sum, value) => sum + Number(value || 0), 0);
             const itemCostHtml = Object.entries(itemCost).map(([docName, amount]) => {
                 const shortName = getDocumentShortName(docName);
@@ -705,11 +713,11 @@ function buildMinimumPathDetailHtml(minimumItems, minimumTotals) {
                 <ul class="minimum-item-costs">${itemCostHtml}</ul>
               </div>
             `;
-        }).join("")
+        }).join("")}</div>`
         : `<p class="empty-message">No minimum path required.</p>`;
 
     return `
-      ${itemRows}
+      ${itemsHtml}
       <h4>Document Totals</h4>
       ${buildDocumentRows(minimumTotals)}
       ${buildTotalRow(minimumTotals)}
@@ -719,6 +727,7 @@ function buildMinimumPathDetailHtml(minimumItems, minimumTotals) {
 function renderPageRequirements(pageNumber, page, cumulativeTotals = {}) {
     const summaryEl = document.querySelector(`#page-summary-${pageNumber}`);
     const pageDocumentsEl = document.querySelector(`#page-documents-${pageNumber}`);
+    const pageDocumentsMetaEl = document.querySelector(`#page-documents-meta-${pageNumber}`);
 
     const totals = calculatePageTotals(page);
     const minimumTotals = calculateMinimumForPrerequisites(page);
@@ -743,10 +752,14 @@ function renderPageRequirements(pageNumber, page, cumulativeTotals = {}) {
 
     summaryEl.innerHTML = summaryHtml;
 
-    const sections = [];
+    if (pageDocumentsMetaEl) {
+        pageDocumentsMetaEl.textContent = formatDocumentSummary(totals);
+    }
+
+    const columns = [];
 
     if (prerequisiteItems > 0) {
-        sections.push(buildCollapsibleSection(
+        columns.push(buildCollapsibleSection(
             "Minimum Path",
             formatDocumentSummary(minimumTotals),
             buildMinimumPathDetailHtml(minimumItems, minimumTotals),
@@ -754,14 +767,14 @@ function renderPageRequirements(pageNumber, page, cumulativeTotals = {}) {
         ));
     }
 
-    sections.push(buildCollapsibleSection(
+    columns.push(buildCollapsibleSection(
         "Page Total",
         formatDocumentSummary(totals),
         `${buildDocumentRows(totals)}${buildTotalRow(totals)}`,
         false
     ));
 
-    pageDocumentsEl.innerHTML = sections.join("");
+    pageDocumentsEl.innerHTML = `<div class="documents-columns">${columns.join("")}</div>`;
 }
 
 // ---------- Wiring ----------

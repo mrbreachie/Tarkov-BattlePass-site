@@ -1,57 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Escape from Tarkov BattlePass</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-<body>
+  <body>
     <header class="top-bar">
-        <h1>Battle Pass</h1>
-        <button id="jump-to-range" class="jump-to-range" type="button">Documents Needed ▾</button>
+      <h1>Battle Pass</h1>
+      <button id="jump-to-range" class="jump-to-range" type="button">
+        Documents Needed ▾
+      </button>
     </header>
 
     <div class="progress-bar-wrapper">
-        <div class="progress-top-row">
-            <button id="previous-page" class="nav-arrow" aria-label="Previous page">‹</button>
-            <div id="progress-label" class="progress-label">Page 1</div>
-            <button id="next-page" class="nav-arrow" aria-label="Next page">›</button>
-        </div>
-        <div id="progress-segments" class="progress-segments"></div>
+      <div class="progress-top-row">
+        <button id="previous-page" class="nav-arrow" aria-label="Previous page">
+          ‹
+        </button>
+        <div id="progress-label" class="progress-label">Page 1</div>
+        <button id="next-page" class="nav-arrow" aria-label="Next page">
+          ›
+        </button>
+      </div>
+      <div id="progress-segments" class="progress-segments"></div>
     </div>
 
     <div class="scroll-nav">
-        <div id="pages-scroll" class="pages-scroll"></div>
+      <div id="pages-scroll" class="pages-scroll"></div>
     </div>
 
     <div class="range-panel-wrapper">
-        <details class="collapsible-section range-panel" id="range-panel" open>
-            <summary>
-                <span>Documents To Reach This Page</span>
-                <span class="summary-meta" id="range-summary-meta"></span>
-            </summary>
-            <div class="disclosure-body">
-                <div class="disclosure-inner range-layout">
-                    <div class="range-controls">
-                        <label class="range-field">
-                            <span>From</span>
-                            <select id="range-from"></select>
-                        </label>
-                        <label class="range-field">
-                            <span>To</span>
-                            <select id="range-to"></select>
-                        </label>
-                    </div>
-                    <div id="range-content"></div>
-                </div>
+      <details class="collapsible-section range-panel" id="range-panel" open>
+        <summary>
+          <span>Documents To Reach This Page</span>
+          <span class="summary-meta" id="range-summary-meta"></span>
+        </summary>
+        <div class="disclosure-body">
+          <div class="disclosure-inner range-layout">
+            <div class="range-controls">
+              <label class="range-field">
+                <span>From</span>
+                <select id="range-from"></select>
+              </label>
+              <label class="range-field">
+                <span>To</span>
+                <select id="range-to"></select>
+              </label>
             </div>
-        </details>
+            <div id="range-content"></div>
+          </div>
+        </div>
+      </details>
     </div>
 
     <script src="./app.js"></script>
-</body>
-
+  </body>
 </html>
