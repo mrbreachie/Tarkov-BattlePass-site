@@ -180,7 +180,7 @@ button:disabled {
 .range-panel-wrapper {
   width: min(1400px, 100%);
   margin: 0 auto;
-  padding: 15px 25px 25px;
+  padding: 0 25px 25px;
 }
 
 .range-panel {
