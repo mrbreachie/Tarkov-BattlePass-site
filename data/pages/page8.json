@@ -75,19 +75,15 @@
       "image": "./images/items/6a5e67dec6956153430432c5.png",
       "requirements": [
         {
-          "documentName": "Project",
-          "amount": 6
-        },
-        {
-          "documentName": "PMC",
+          "documentName": "Technical",
           "amount": 3
         },
         {
-          "documentName": "Technical",
+          "documentName": "Medical",
           "amount": 2
         },
         {
-          "documentName": "User",
+          "documentName": "Project",
           "amount": 1
         }
       ]
