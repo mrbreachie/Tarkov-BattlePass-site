@@ -41,19 +41,19 @@
           "amount": 6
         },
         {
-          "documentName": "Blueprints",
+          "documentName": "Medical",
+          "amount": 5
+        },
+        {
+          "documentName": "PMC",
           "amount": 5
         },
         {
           "documentName": "User",
-          "amount": 5
-        },
-        {
-          "documentName": "Medical",
           "amount": 2
         },
         {
-          "documentName": "Financial",
+          "documentName": "Project",
           "amount": 2
         }
       ]
