@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Translate Document IDs to Short Names</title>
+    <style>
+      :root {
+        --background: #101515;
+        --panel: #172222;
+        --border: #39504d;
+        --text: #e4e8df;
+        --muted: #92a39e;
+        --accent: #c5a64b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 28px;
+        min-height: 100vh;
+        background: radial-gradient(
+          circle at center,
+          #263632 0%,
+          var(--background) 65%
+        );
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      main {
+        width: min(1200px, 100%);
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0 0 8px;
+        color: #e3d39b;
+        font-size: 24px;
+      }
+      p {
+        color: var(--muted);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .panel {
+        padding: 16px;
+        background: rgba(23, 34, 34, 0.92);
+        border: 1px solid var(--border);
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #e3d39b;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      textarea {
+        width: 100%;
+        min-height: 270px;
+        padding: 10px;
+        resize: vertical;
+        background: #0b1111;
+        border: 1px solid var(--border);
+        color: var(--text);
+        font:
+          12px/1.45 Consolas,
+          monospace;
+      }
+      #mapping {
+        min-height: 210px;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 18px 0;
+      }
+      button {
+        padding: 9px 13px;
+        background: #223030;
+        border: 1px solid var(--border);
+        color: var(--text);
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: var(--accent);
+        background: #31433f;
+      }
+      #status {
+        min-height: 20px;
+        color: var(--muted);
+      }
+      .error {
+        color: #e77d70;
+      }
+      @media (max-width: 760px) {
+        body {
+          padding: 16px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Translate Document IDs to Short Names</h1>
+      <p>
+        Paste the mapping records on the left and any JSON dump on the right.
+        Every matching dump <code>id</code> is replaced with the document
+        <code>shortName</code>, including nested values and object keys.
+      </p>
+
+      <div class="grid">
+        <section class="panel">
+          <label for="mapping">ID mapping records</label>
+          <textarea id="mapping" spellcheck="false">
+[
+  {
+    "id": "6a318aa1a3afbdeaf55b578e",
+    "shortName": "Financial"
+  },
+  {
+    "id": "6a318b84fab84feb6aa71fe4",
+    "shortName": "PMC"
+  },
+  {
+    "id": "6a318c000357e1cc214ff8b4",
+    "shortName": "Project"
+  },
+  {
+    "id": "6a318c4787bb92f2d5f13088",
+    "shortName": "Blueprints"
+  },
+  {
+    "id": "6a318c7d1ee27abd10b8c6d8",
+    "shortName": "Test"
+  },
+  {
+    "id": "6a318c87a7e717b20bcda2df",
+    "shortName": "User"
+  },
+  {
+    "id": "6a318c87a8e42ee82c93d1c6",
+    "shortName": "Medical"
+  },
+  {
+    "id": "6a318c88c4e0f26c1820632c",
+    "shortName": "Technical"
+  }
+]</textarea
+          >
+        </section>
+
+        <section class="panel">
+          <label for="input">JSON dump to translate</label>
+          <textarea
+            id="input"
+            spellcheck="false"
+            placeholder="Paste a JSON object or array here..."
+          ></textarea>
+        </section>
+      </div>
+
+      <div class="actions">
+        <button id="translate" type="button">Translate IDs</button>
+        <button id="copy" type="button">Copy result</button>
+        <button id="download" type="button">Download JSON</button>
+      </div>
+      <div id="status" aria-live="polite"></div>
+
+      <section class="panel">
+        <label for="output">Translated JSON</label>
+        <textarea id="output" spellcheck="false" readonly></textarea>
+      </section>
+    </main>
+
+    <script>
+      const mappingInput = document.querySelector("#mapping");
+      const input = document.querySelector("#input");
+      const output = document.querySelector("#output");
+      const status = document.querySelector("#status");
+
+      function parseJson(text, label) {
+        try {
+          return JSON.parse(text);
+        } catch (error) {
+          throw new Error(`${label} is not valid JSON: ${error.message}`);
+        }
+      }
+
+      function buildMap(records) {
+        if (!Array.isArray(records)) {
+          throw new Error("The mapping must be a JSON array.");
+        }
+
+        const idMap = new Map();
+        records.forEach((record, index) => {
+          if (
+            !record ||
+            typeof record.id !== "string" ||
+            typeof record.shortName !== "string"
+          ) {
+            throw new Error(
+              `Mapping record ${index + 1} needs string id and shortName fields.`,
+            );
+          }
+          idMap.set(record.id, record.shortName);
+        });
+        return idMap;
+      }
+
+      function translate(value, idMap, stats) {
+        if (typeof value === "string" && idMap.has(value)) {
+          stats.replaced += 1;
+          return idMap.get(value);
+        }
+        if (Array.isArray(value))
+          return value.map((item) => translate(item, idMap, stats));
+        if (value && typeof value === "object") {
+          return Object.fromEntries(
+            Object.entries(value).map(([key, child]) => {
+              const translatedKey = idMap.has(key) ? idMap.get(key) : key;
+              if (translatedKey !== key) stats.replaced += 1;
+              return [translatedKey, translate(child, idMap, stats)];
+            }),
+          );
+        }
+        return value;
+      }
+
+      function translateDump() {
+        try {
+          const idMap = buildMap(parseJson(mappingInput.value, "Mapping"));
+          const dump = parseJson(input.value, "Dump");
+          const stats = { replaced: 0 };
+          output.value = JSON.stringify(translate(dump, idMap, stats), null, 2);
+          status.className = "";
+          status.textContent = `Translated ${stats.replaced} ID value${stats.replaced === 1 ? "" : "s"} to short names using ${idMap.size} mapping record${idMap.size === 1 ? "" : "s"}.`;
+        } catch (error) {
+          output.value = "";
+          status.className = "error";
+          status.textContent = error.message;
+        }
+      }
+
+      document
+        .querySelector("#translate")
+        .addEventListener("click", translateDump);
+      document.querySelector("#copy").addEventListener("click", async () => {
+        if (!output.value) translateDump();
+        if (!output.value) return;
+        await navigator.clipboard.writeText(output.value);
+        status.className = "";
+        status.textContent = "Translated JSON copied to the clipboard.";
+      });
+      document.querySelector("#download").addEventListener("click", () => {
+        if (!output.value) translateDump();
+        if (!output.value) return;
+        const blob = new Blob([output.value], { type: "application/json" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "translated-document-ids.json";
+        link.click();
+        URL.revokeObjectURL(link.href);
+      });
+    </script>
+  </body>
+</html>
