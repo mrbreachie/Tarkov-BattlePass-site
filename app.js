@@ -6,10 +6,17 @@ const pagesLoading = {};  // pageNumber -> in-flight fetch promise (avoids dupli
 const selectedItemIndexByPage = {}; // pageNumber -> selected item index
 
 const SESSION_STATE_KEY = "battlepass-session-state";
+const defaultCollapsibleState = {
+    rangePanel: true,
+    minimumPath: false,
+    pageTotal: false,
+    routeSummary: true,
+};
 
 let currentPageIndex = 0; // 0-indexed
 let observer;
 let rangeCustomized = false; // becomes true once the user manually picks a "From"/"To" page
+let collapsibleState = { ...defaultCollapsibleState };
 
 // ---------- Session state ----------
 
@@ -18,7 +25,7 @@ function loadSessionState() {
         const rawState = sessionStorage.getItem(SESSION_STATE_KEY);
 
         if (!rawState) {
-            return { currentPageIndex: 0 };
+            return { currentPageIndex: 0, collapsibleState: { ...defaultCollapsibleState } };
         }
 
         const parsedState = JSON.parse(rawState);
@@ -27,16 +34,23 @@ function loadSessionState() {
             currentPageIndex: Number.isFinite(parsedState?.currentPageIndex)
                 ? parsedState.currentPageIndex
                 : 0,
+            collapsibleState: {
+                ...defaultCollapsibleState,
+                ...(parsedState?.collapsibleState || {}),
+            },
         };
     } catch (error) {
         console.warn("Could not load saved session state.", error);
-        return { currentPageIndex: 0 };
+        return { currentPageIndex: 0, collapsibleState: { ...defaultCollapsibleState } };
     }
 }
 
 function saveSessionState() {
     try {
-        sessionStorage.setItem(SESSION_STATE_KEY, JSON.stringify({ currentPageIndex }));
+        sessionStorage.setItem(SESSION_STATE_KEY, JSON.stringify({
+            currentPageIndex,
+            collapsibleState,
+        }));
     } catch (error) {
         console.warn("Could not save session state.", error);
     }
@@ -89,8 +103,12 @@ async function init() {
         const savedState = loadSessionState();
         const totalPages = getTotalPages();
         currentPageIndex = Math.min(Math.max(savedState.currentPageIndex, 0), totalPages - 1);
+        collapsibleState = savedState.collapsibleState;
 
         populateRangeDropdowns();
+        document.querySelectorAll('[data-collapse-key="rangePanel"]').forEach(panel => {
+            setCollapsibleState(panel, collapsibleState.rangePanel);
+        });
 
         scrollToPage(currentPageIndex, false);
         setupIntersectionObserver();
@@ -195,18 +213,49 @@ function buildSlideTemplate(pageNumber) {
       </main>
 
       <section class="full-width-section">
-        <details class="collapsible-section" open>
-          <summary>
-            <span>Documents Needed This Page</span>
-            <span class="summary-meta" id="page-documents-meta-${pageNumber}"></span>
-          </summary>
-          <div class="disclosure-body">
-            <div class="disclosure-inner" id="page-documents-${pageNumber}"></div>
-          </div>
-        </details>
+                <div class="section-header-bar">
+                    <h2>Documents Needed This Page</h2>
+                    <span class="summary-meta" id="page-documents-meta-${pageNumber}"></span>
+                </div>
+                <div class="disclosure-inner" id="page-documents-${pageNumber}"></div>
       </section>
+
+            ${buildRangePanelTemplate(pageNumber)}
     </div>
   `;
+}
+
+function buildRangePanelTemplate(pageNumber) {
+    return `
+            <div class="range-panel-wrapper">
+                <details
+                    class="collapsible-section range-panel"
+                    id="range-panel-${pageNumber}"
+                    data-collapse-key="rangePanel"
+                    open
+                >
+                    <summary>
+                        <span>Documents To Reach This Page</span>
+                        <span class="summary-meta" id="range-summary-meta-${pageNumber}"></span>
+                    </summary>
+                    <div class="disclosure-body">
+                        <div class="disclosure-inner range-layout">
+                            <div class="range-controls">
+                                <label class="range-field">
+                                    <span>From</span>
+                                    <select id="range-from-${pageNumber}"></select>
+                                </label>
+                                <label class="range-field">
+                                    <span>To</span>
+                                    <select id="range-to-${pageNumber}"></select>
+                                </label>
+                            </div>
+                            <div id="range-content-${pageNumber}"></div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        `;
 }
 
 function buildProgressBar() {
@@ -332,10 +381,11 @@ async function renderSlide(pageNumber) {
     }
 
     if (!rangeCustomized) {
-        const toSelect = document.querySelector("#range-to");
+        const toSelect = document.querySelector(`#range-to-${pageNumber}`);
         if (toSelect) toSelect.value = String(pageNumber);
     }
-    await updateRangePanel();
+    syncRangeDropdowns(pageNumber);
+    await updateRangePanel(pageNumber);
 }
 
 function renderItemList(pageNumber, page, selectedIndex) {
@@ -495,13 +545,14 @@ function buildTotalRow(totals) {
     `;
 }
 
-function buildCollapsibleSection(title, summaryText, contentHtml, isOpen = false, extraClass = "") {
+function buildCollapsibleSection(title, summaryText, contentHtml, isOpen = false, extraClass = "", collapseKey = "") {
     const stateClass = isOpen ? "" : " is-collapsed";
     const className = `collapsible-section${extraClass ? " " + extraClass : ""}${stateClass}`;
     const openAttr = isOpen ? " open" : "";
+    const keyAttr = collapseKey ? ` data-collapse-key="${collapseKey}"` : "";
 
     return `
-      <details class="${className}"${openAttr}>
+            <details class="${className}"${keyAttr}${openAttr}>
         <summary>
           <span>${title}</span>
           <span class="summary-meta">${summaryText}</span>
@@ -576,36 +627,52 @@ function calculateMinimumForPrerequisites(page) {
 }
 
 function populateRangeDropdowns() {
-    const fromSelect = document.querySelector("#range-from");
-    const toSelect = document.querySelector("#range-to");
-    if (!fromSelect || !toSelect) return;
-
     const totalPages = getTotalPages();
     let options = "";
     for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
         options += `<option value="${pageNumber}">Page ${pageNumber}</option>`;
     }
 
-    fromSelect.innerHTML = options;
-    toSelect.innerHTML = options;
+    document.querySelectorAll("[id^='range-from-']").forEach(fromSelect => {
+        const pageNumber = Number(fromSelect.id.replace("range-from-", ""));
+        const toSelect = document.querySelector(`#range-to-${pageNumber}`);
+        if (!toSelect) return;
 
-    fromSelect.value = "1";
-    toSelect.value = String(currentPageIndex + 1);
+        fromSelect.innerHTML = options;
+        toSelect.innerHTML = options;
+        fromSelect.value = "1";
+        toSelect.value = String(pageNumber);
 
-    fromSelect.addEventListener("change", () => {
-        rangeCustomized = true;
-        updateRangePanel();
-    });
+        fromSelect.addEventListener("change", () => {
+            rangeCustomized = true;
+            syncRangeDropdowns(pageNumber);
+            updateRangePanel(pageNumber);
+        });
 
-    toSelect.addEventListener("change", () => {
-        rangeCustomized = true;
-        updateRangePanel();
+        toSelect.addEventListener("change", () => {
+            rangeCustomized = true;
+            syncRangeDropdowns(pageNumber);
+            updateRangePanel(pageNumber);
+        });
     });
 }
 
-async function updateRangePanel() {
-    const fromSelect = document.querySelector("#range-from");
-    const toSelect = document.querySelector("#range-to");
+function syncRangeDropdowns(pageNumber) {
+    const fromSelect = document.querySelector(`#range-from-${pageNumber}`);
+    const toSelect = document.querySelector(`#range-to-${pageNumber}`);
+    if (!fromSelect || !toSelect) return;
+
+    document.querySelectorAll("[id^='range-from-']").forEach(select => {
+        select.value = fromSelect.value;
+    });
+    document.querySelectorAll("[id^='range-to-']").forEach(select => {
+        select.value = toSelect.value;
+    });
+}
+
+async function updateRangePanel(pageNumber = currentPageIndex + 1) {
+    const fromSelect = document.querySelector(`#range-from-${pageNumber}`);
+    const toSelect = document.querySelector(`#range-to-${pageNumber}`);
     if (!fromSelect || !toSelect || !fromSelect.value || !toSelect.value) return;
 
     let fromPage = Number(fromSelect.value);
@@ -622,7 +689,7 @@ async function updateRangePanel() {
     await Promise.all(pageNumbers.map(ensurePageLoaded));
 
     const totals = calculateRangeTotals(fromPage, toPage);
-    renderRangePanel(fromPage, toPage, totals);
+    renderRangePanel(pageNumber, fromPage, toPage, totals);
 }
 
 function calculateRangeTotals(fromPage, toPage) {
@@ -645,9 +712,9 @@ function calculateRangeTotals(fromPage, toPage) {
     return totals;
 }
 
-function renderRangePanel(fromPage, toPage, totals) {
-    const summaryMeta = document.querySelector("#range-summary-meta");
-    const content = document.querySelector("#range-content");
+function renderRangePanel(pageNumber, fromPage, toPage, totals) {
+    const summaryMeta = document.querySelector(`#range-summary-meta-${pageNumber}`);
+    const content = document.querySelector(`#range-content-${pageNumber}`);
     if (!summaryMeta || !content) return;
 
     summaryMeta.textContent = `Page ${fromPage} → Page ${toPage} · ${formatDocumentSummary(totals)}`;
@@ -680,7 +747,7 @@ function buildRangeRouteSummary(fromPage, toPage) {
     }
 
     return `
-      <details class="route-summary" open>
+    <details class="route-summary${collapsibleState.routeSummary ? "" : " is-collapsed"}" data-collapse-key="routeSummary"${collapsibleState.routeSummary ? " open" : ""}>
         <summary>
           <span>Route for this range</span>
         </summary>
@@ -763,7 +830,9 @@ function renderPageRequirements(pageNumber, page, cumulativeTotals = {}) {
             "Minimum Path",
             formatDocumentSummary(minimumTotals),
             buildMinimumPathDetailHtml(minimumItems, minimumTotals),
-            false
+            collapsibleState.minimumPath,
+            "",
+            "minimumPath"
         ));
     }
 
@@ -771,7 +840,9 @@ function renderPageRequirements(pageNumber, page, cumulativeTotals = {}) {
         "Page Total",
         formatDocumentSummary(totals),
         `${buildDocumentRows(totals)}${buildTotalRow(totals)}`,
-        false
+        collapsibleState.pageTotal,
+        "",
+        "pageTotal"
     ));
 
     pageDocumentsEl.innerHTML = `<div class="documents-columns">${columns.join("")}</div>`;
@@ -791,13 +862,26 @@ document.addEventListener("click", (event) => {
     const nextOpenState = !details.hasAttribute("open");
     details.toggleAttribute("open", nextOpenState);
     details.classList.toggle("is-collapsed", !nextOpenState);
+
+    const collapseKey = details.dataset.collapseKey;
+    if (collapseKey) {
+        collapsibleState[collapseKey] = nextOpenState;
+        saveSessionState();
+    }
 });
+
+function setCollapsibleState(details, isOpen) {
+    if (!details) return;
+
+    details.toggleAttribute("open", isOpen);
+    details.classList.toggle("is-collapsed", !isOpen);
+}
 
 document.querySelector("#previous-page").addEventListener("click", goToPreviousPage);
 document.querySelector("#next-page").addEventListener("click", goToNextPage);
 
 document.querySelector("#jump-to-range").addEventListener("click", () => {
-    const panel = document.querySelector("#range-panel");
+    const panel = document.querySelector(`#range-panel-${currentPageIndex + 1}`);
     if (!panel) return;
 
     panel.open = true;

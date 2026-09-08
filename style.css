@@ -183,6 +183,11 @@ button:disabled {
   padding: 0 25px 25px;
 }
 
+.page-slide .range-panel-wrapper {
+  width: 100%;
+  padding: 22px 0 0;
+}
+
 .range-panel {
   background: rgba(17, 27, 27, 0.88);
   border: 1px solid var(--border);
@@ -396,7 +401,24 @@ button:disabled {
   border: 1px solid var(--border);
 }
 
-.full-width-section > div {
+.section-header-bar {
+  min-height: 46px;
+  padding: 14px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-header-bar h2 {
+  margin: 0;
+  color: var(--accent-light);
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.full-width-section > .disclosure-inner {
   width: 100%;
 }
 
@@ -875,6 +897,11 @@ button:disabled {
 
   .full-width-section {
     margin-top: 12px;
+  }
+
+  .section-header-bar {
+    min-height: 44px;
+    padding: 12px;
   }
 
   .collapsible-section summary {
