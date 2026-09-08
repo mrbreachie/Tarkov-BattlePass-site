@@ -5,6 +5,21 @@
     },
     "items": [
         {
+            "itemName": "Gentex Ops-Core SOTR respirator ",
+            "itemId": "689b404db49f27df1c0873f6",
+            "image": "./images/items/6a5e677c3f7a5533040ca2e5.png",
+            "requirements": [
+                {
+                    "documentName": "Medical",
+                    "amount": 2
+                },
+                {
+                    "documentName": "Bluepritns",
+                    "amount": 2
+                }
+            ]
+        },
+        {
             "itemName": "Red Hawaiin Shirt",
             "itemId": "6a5e6854ac605a08520e2a57",
             "image": "./images/items/6a5e6854ac605a08520e2a57.png",
@@ -19,6 +34,51 @@
                 },
                 {
                     "documentName": "Medical",
+                    "amount": 1
+                }
+            ]
+        },
+        {
+            "itemName": "Black Division Crate",
+            "itemId": "6a5e675d3f7a5533040ca2e4",
+            "image": "./images/items/6a5e675d3f7a5533040ca2e4.png",
+            "requirements": [
+                {
+                    "documentName": "Test",
+                    "amount": 3
+                }
+            ]
+        },
+        {
+            "itemName": "Scorpion target ",
+            "itemId": "6a3575489725a9cf0c0907ed",
+            "image": "./images/items/6a5e67f9bf561127450b27c8.png",
+            "requirements": [
+                {
+                    "documentName": "User",
+                    "amount": 1
+                },
+                {
+                    "documentName": "PMC",
+                    "amount": 1
+                },
+                {
+                    "documentName": "Bluepritns",
+                    "amount": 1
+                }
+            ]
+        },
+        {
+            "itemName": "TarCoin",
+            "itemId": "6a57cb8348156b1a682e4933",
+            "image": "./images/items/6a5e67f03d0e6b95910b8605.png",
+            "requirements": [
+                {
+                    "documentName": "PMC",
+                    "amount": 2
+                },
+                {
+                    "documentName": "Project",
                     "amount": 1
                 }
             ]

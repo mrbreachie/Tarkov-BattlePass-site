@@ -11,7 +11,7 @@
       "requirements": [
         {
           "documentName": "Project",
-          "amount": 1
+          "amount": 2
         },
         {
           "documentName": "Blueprints",
@@ -53,7 +53,7 @@
       "requirements": [
         {
           "documentName": "Technical",
-          "amount": 2
+          "amount": 3
         },
         {
           "documentName": "Project",
@@ -75,7 +75,7 @@
           "amount": 2
         },
         {
-          "documentName": "Technical",
+          "documentName": "Financial",
           "amount": 1
         }
       ]
@@ -86,16 +86,16 @@
       "image": "./images/items/6a5e675d3f7a5533040ca2e4.png",
       "requirements": [
         {
+          "documentName": "Project",
+          "amount": 2
+        },
+        {
+          "documentName": "Medical",
+          "amount": 2
+        },
+        {
           "documentName": "PMC",
           "amount": 1
-        },
-        {
-          "documentName": "Blueprints",
-          "amount": 2
-        },
-        {
-          "documentName": "User",
-          "amount": 2
         }
       ]
     }
